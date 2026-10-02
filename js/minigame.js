@@ -45,7 +45,7 @@ const Minigame = {
     } else {
       this.value = 0.5;
       this.band = 0.5;
-      this.bandW = (kind === "tensionErratic" ? 0.11 : 0.15) * (rod.tension || 1) * Skills.tensionMult();
+      this.bandW = (kind === "tensionErratic" ? 0.11 : 0.15);
       this.speed = (kind === "tensionErratic" ? 1.6 : 1.05) * spd;
       const inches = (typeof Fishing !== "undefined" && Fishing.fightInches) || 6;
       const weight = Utils.clamp((inches - 3) / 17, 0.12, 1);

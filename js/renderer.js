@@ -264,7 +264,7 @@ const Renderer = {
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, this.viewW, this.viewH);
       }
-      this._lanternGlow(ctx, cam);
+      this._lanternGlow(ctx, cam, DESIGN.lanternIndoor);
       return;
     }
     if (World.inCave()) {
@@ -277,7 +277,7 @@ const Renderer = {
       glow.addColorStop(1, "rgba(8, 10, 22, 0.42)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, this.viewW, this.viewH);
-      this._lanternGlow(ctx, cam);
+      this._lanternGlow(ctx, cam, DESIGN.lanternPeak);
       return;
     }
 
@@ -305,7 +305,7 @@ const Renderer = {
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, this.viewW, this.viewH);
     this._weatherVeil(ctx);
-    this._lanternGlow(ctx, cam);
+    this._lanternGlow(ctx, cam, DESIGN.lanternPeak * Utils.clamp(light.color[3] / DESIGN.lanternNightA, 0, 1));
   },
 
   _weatherVeil(ctx) {
@@ -322,8 +322,9 @@ const Renderer = {
     ctx.restore();
   },
 
-  _lanternGlow(ctx, cam) {
+  _lanternGlow(ctx, cam, peak) {
     if (typeof Survival === "undefined" || !Survival.lanternLit()) return;
+    if (!(peak > 0.005)) return;
     const hand = (typeof Sprites !== "undefined" && Sprites.lanternPos)
       ? Sprites.lanternPos(Player.x, Player.y, Player.dir)
       : { x: Player.x + 9, y: Player.y - 8 };
@@ -332,9 +333,9 @@ const Renderer = {
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     const glow = ctx.createRadialGradient(sx, sy, 4, sx, sy, 110);
-    glow.addColorStop(0, "rgba(255, 220, 140, 0.55)");
-    glow.addColorStop(0.18, "rgba(255, 190, 90, 0.22)");
-    glow.addColorStop(0.5, "rgba(255, 160, 60, 0.1)");
+    glow.addColorStop(0, "rgba(255, 220, 140, " + peak + ")");
+    glow.addColorStop(0.18, "rgba(255, 190, 90, " + (peak * 0.4) + ")");
+    glow.addColorStop(0.5, "rgba(255, 160, 60, " + (peak * 0.18) + ")");
     glow.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = glow;
     ctx.beginPath();

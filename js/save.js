@@ -3,6 +3,7 @@
 const Save = {
   data: null,
   _timer: 0,
+  _keepData: false,
 
   blankJournalEntry() {
     return { caught: 0, biggest: 0, firstAt: 0, lastAt: 0, hooked: 0, landed: 0, gotAway: 0, shiny: 0, favorite: false, firstDay: 0 };
@@ -235,6 +236,7 @@ const Save = {
   },
 
   pullFromWorld() {
+    if (this._keepData) return;
     const d = this.data;
     d.clock.seconds = TimeCycle.seconds;
     d.clock.day = TimeCycle.day || d.clock.day;
@@ -279,6 +281,7 @@ const Save = {
   importJson(text) {
     const parsed = JSON.parse(text);
     this.data = this._migrate(parsed);
+    this._keepData = true;
     this._ensureFish();
     this.syncCaught();
     try { if (typeof Stamps !== "undefined") Stamps.reconcile(); } catch (e) { /* stamps optional */ }
@@ -290,6 +293,7 @@ const Save = {
     const mute = !!(this.data && this.data.flags && this.data.flags.mute);
     try { localStorage.removeItem(SAVE_KEY); } catch (e) { /* ignore */ }
     this.data = this.fresh();
+    this._keepData = true;
     this.data.flags.mute = mute;
     AudioFX.muted = mute;
     this.write();

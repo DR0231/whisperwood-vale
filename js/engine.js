@@ -433,14 +433,22 @@ const AudioFX = {
       if (!this.ctx || this._rain) return;
       const ctx = this.ctx;
       const seconds = 1.4;
-      const buf = ctx.createBuffer(1, (ctx.sampleRate * seconds) | 0, ctx.sampleRate);
-      const data = buf.getChannelData(0);
+      const len = (ctx.sampleRate * seconds) | 0;
+      const fade = (ctx.sampleRate * 0.02) | 0;
+      const tmp = new Float32Array(len + fade);
       let brown = 0;
-      for (let i = 0; i < data.length; i++) {
+      for (let i = 0; i < tmp.length; i++) {
         const white = Math.random() * 2 - 1;
         brown = brown * 0.94 + white * 0.06;
-        data[i] = brown;
+        tmp[i] = brown;
       }
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < fade; i++) {
+        const t = i / fade;
+        data[i] = tmp[i] * t + tmp[len + i] * (1 - t);
+      }
+      for (let i = fade; i < len; i++) data[i] = tmp[i];
       const src = ctx.createBufferSource();
       src.buffer = buf;
       src.loop = true;

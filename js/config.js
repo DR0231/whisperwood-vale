@@ -92,6 +92,9 @@ const DESIGN = {
   lanternFuel: 6,
   lanternBurn: 0.12,
   lanternWarmth: 0.55,
+  lanternPeak: 0.35,      // centre alpha of the held lantern at full night outdoors and in caves
+  lanternIndoor: 0.16,    // centre alpha in the cottage, matches the lamp shelf glow
+  lanternNightA: 0.58,    // scene light alpha at midnight (TimeCycle.sample stop h:0)
   cloakWarmth: 0.7,
   weatheredWarmth: 0.65,
   foragerChance: 0.4,
@@ -105,8 +108,8 @@ const DESIGN = {
   strWrist: 1.08,
   strMin: 0.65,
   strMax: 1.60,
-  /* Rank 4 shortens the hook window. Rank 6 shortens the wait before the bite. They do not stack on the same number. */
-  rank4HookMul: 0.9,
+  /* Rank 4 lengthens the hook window. Rank 6 shortens the wait before the bite. They do not stack on the same number. */
+  rank4HookMul: 1.10,
   rank6CastMul: 0.9,
   perkOffer: 2,
   /* Interaction reach (px). E picks the nearest thing inside these before it fishes. */
