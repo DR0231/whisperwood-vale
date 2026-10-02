@@ -377,6 +377,7 @@ const Game = {
       World.generate();
       Player.spawn();
       Save.applyToWorld();
+      try { if (typeof Stamps !== "undefined") Stamps.reconcile(); } catch (e) { /* stamps optional */ }
       if (!Save.data.quests.daily.day) {
         try { Weather.rollDay(); } catch (e) { /* sky still works on the default forecast */ }
         try { Quests.rollDay(); } catch (e) { /* board flavor must not block boot */ }

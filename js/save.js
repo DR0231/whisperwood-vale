@@ -82,8 +82,6 @@ const Save = {
       if (row && (row.landed | 0) > 0) { this.data.flags.onboard.done = true; break; }
     }
     try { this.syncCaught(); } catch (e) { /* pack counts optional at boot */ }
-    try { if (typeof Stamps !== "undefined") Stamps.reconcile(); } catch (e) { /* stamps optional */ }
-    try { if (typeof Island !== "undefined") Island.sync(true); } catch (e) { /* island gate optional */ }
     return this.data;
   },
 
