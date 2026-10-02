@@ -601,7 +601,8 @@ const Sprites = {
   rodTip(x, y, dir, phase, windup, bite) {
     let lift = Math.sin(phase) * 1.2;
     if (windup) lift -= 6;
-    if (bite) lift += 4 + Math.sin(phase * 8) * 2;
+    const bob = (typeof Minigame !== "undefined" && Minigame.rainLean && Minigame.rainLean()) ? 3 : 2;
+    if (bite) lift += 4 + Math.sin(phase * 8) * bob;
     const sheet = typeof Atlas !== "undefined" && Atlas.sheets && Atlas.sheets.player;
     const rod = sheet && Atlas.PLAYER && Atlas.PLAYER.rod && Atlas.PLAYER.rod[dir];
     if (rod) {

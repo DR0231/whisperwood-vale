@@ -110,6 +110,8 @@ const DESIGN = {
   strWrist: 1.08,
   strMin: 0.65,
   strMax: 1.60,
+  /* Rain leans on outdoor tension fights: extra slack drop per second while not holding. Reed: 0.05, ceiling 0.06. Not a multiplier on the fight ramp. */
+  rainPull: 0.05,
   /* Rank 4 lengthens the hook window. Rank 6 shortens the wait before the bite. They do not stack on the same number. */
   rank4HookMul: 1.10,
   rank6CastMul: 0.9,
