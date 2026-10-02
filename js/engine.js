@@ -110,12 +110,13 @@ const Input = {
     this._bound = true;
     const on = (e, val) => {
       if (typeof Admin !== "undefined" && Admin.typing()) return;
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
       const k = this._alias(e);
       if (!k) return;
+      const mod = e.ctrlKey || e.metaKey || e.altKey;
+      if (mod && val) return;
       const decorKey = k === "r" || k === "f" || k === "q" || k === "-" || k === "=" || k === "[" || k === "]";
       const decorLive = decorKey && typeof Cottage !== "undefined" && Cottage.decorOn() && World.id === "cottage";
-      if (this._isMove(k) || k === " " || k === "e" || k === "j" || k === "i" || k === "escape" || decorLive) {
+      if (!mod && (this._isMove(k) || k === " " || k === "e" || k === "j" || k === "i" || k === "escape" || decorLive)) {
         e.preventDefault();
         if (typeof e.stopPropagation === "function") e.stopPropagation();
       }
