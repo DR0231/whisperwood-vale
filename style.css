@@ -996,3 +996,7 @@ kbd {
 #move-pad [data-move="left"] { grid-column: 1; grid-row: 2; }
 #move-pad [data-move="down"] { grid-column: 2; grid-row: 2; }
 #move-pad [data-move="right"] { grid-column: 3; grid-row: 2; }
+
+#move-pad #btn-packup { display: none; grid-column: 1; grid-row: 1; width: 44px; height: 44px; font: 700 10px Georgia, serif; letter-spacing: 0.06em; line-height: 1.1; white-space: normal; padding: 0; background: var(--parchment); color: var(--ink); border: 2px solid #8b6238; border-radius: 0; }
+#move-pad #btn-packup.is-on { display: block; }
+#move-pad #btn-packup.is-held, #move-pad #btn-packup:active { background: var(--parchment-dark); }

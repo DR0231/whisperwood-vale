@@ -138,7 +138,7 @@ const Inventory = {
       const g = looseGroups[id];
       const bits = [];
       if (g.fresh) bits.push(`<span class="ink-fresh">Fresh ×${g.fresh}</span>`);
-      if (g.soft) bits.push(`<span class="ink-soft">Aging ×${g.soft}</span>`);
+      if (g.soft) bits.push(`<span class="ink-soft">Soft ×${g.soft}</span>`);
       return `${f ? f.name : id}: ${bits.join(" · ")} <button type="button" data-eatfish="${id}">Eat</button>`;
     }).join("<br/>") || "No loose fish.";
     const extras = ["berries", "millreed", "saltberries", "crystal"].map((id) => `${BAIT[id].name} ×${this.baitCount(id)}`).join(" · ");

@@ -460,7 +460,7 @@ const Fishing = {
     if (this.state === "wait" || this.state === "nibble") {
       return "Watch the bobber…  Move to pack up";
     }
-    if (this.state === "aim") return "WASD aim · E to cast · Esc to pack";
+    if (this.state === "aim") return "WASD aim · E or Fish to cast · Esc or Pack up to stop";
     if (this.state === "cast") return "Casting…";
     if (this.state === "reel") return "Reeling in…";
     if (this.state === "fail") return "It got away…";

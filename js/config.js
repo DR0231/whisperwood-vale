@@ -85,6 +85,8 @@ const DESIGN = {
   nightOwlRest: 0.65,
   berryHunger: 12,
   chairRest: 2.4,
+  /* Decor parked: needs a major rework (scales break the pixel grid, chair can block the bed). */
+  decorOn: false,
   finchCost: 90,
   spineCost: 220,
   eatFishHunger: 18,

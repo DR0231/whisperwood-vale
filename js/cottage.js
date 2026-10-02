@@ -108,7 +108,12 @@ const Cottage = {
     return Save.data.cottage.decor;
   },
 
+  decorOn() {
+    return !!(typeof DESIGN !== "undefined" && DESIGN.decorOn);
+  },
+
   hasSlot(id) {
+    if (!this.decorOn()) return false;
     const v = this.decorBag()[id];
     return !!(v && v !== false);
   },
@@ -900,6 +905,7 @@ const Shop = {
         return `<button type="button" data-buy="${it.kind}:${it.id}" ${have ? "disabled" : ""}>${it.name} — ${it.price}c${it.requireBait ? " + crystal" : ""}${stock}</button>`;
       }
       if (it.kind === "kit" || it.kind === "decor") {
+        if (!Cottage.decorOn()) return "";
         const owned = Cottage.hasCatalog(it);
         const broke = Inventory.coins() < it.price;
         return `<button type="button" data-buy="${it.kind}:${it.id}" ${owned || broke ? "disabled" : ""}>${it.name} — ${it.price}c${owned ? " (hung)" : ""}</button>`;
@@ -973,6 +979,7 @@ const Shop = {
       if (it.stock != null) this.stock[id]--;
       UI.toastNote(`Bought ${it.name}.`);
     } else if (kind === "kit" || kind === "decor") {
+      if (!Cottage.decorOn()) return;
       const it = SHOP_CATALOG.find((s) => s.id === id && s.kind === kind);
       if (!it || Skills.rank() < (it.minRank || 0) || Cottage.hasCatalog(it)) return;
       if (Inventory.coins() < it.price) return;

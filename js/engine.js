@@ -110,10 +110,12 @@ const Input = {
     this._bound = true;
     const on = (e, val) => {
       if (typeof Admin !== "undefined" && Admin.typing()) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
       const k = this._alias(e);
       if (!k) return;
-      if (this._isMove(k) || k === " " || k === "e" || k === "j" || k === "i" || k === "escape"
-        || k === "r" || k === "f" || k === "q" || k === "-" || k === "=" || k === "[" || k === "]") {
+      const decorKey = k === "r" || k === "f" || k === "q" || k === "-" || k === "=" || k === "[" || k === "]";
+      const decorLive = decorKey && typeof Cottage !== "undefined" && Cottage.decorOn() && World.id === "cottage";
+      if (this._isMove(k) || k === " " || k === "e" || k === "j" || k === "i" || k === "escape" || decorLive) {
         e.preventDefault();
         if (typeof e.stopPropagation === "function") e.stopPropagation();
       }
@@ -166,6 +168,14 @@ const Input = {
       fishBtn.addEventListener("pointerup", up);
       fishBtn.addEventListener("pointerleave", up);
       fishBtn.addEventListener("pointercancel", up);
+    }
+    const packBtn = document.getElementById("btn-packup");
+    if (packBtn) {
+      packBtn.addEventListener("pointerdown", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        if (typeof Fishing !== "undefined" && Fishing.state === "aim") Fishing.cancel();
+      });
     }
     this.syncPad();
     window.addEventListener("resize", () => this.syncPad());

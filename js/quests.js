@@ -249,7 +249,7 @@ const Mail = {
     const rec = (Save.data.recap || []).find((r) => r.reason === "passout");
     if (rec) notes.unshift("Wren: I found you in the reeds last night. The kettle’s still warm.");
     if ((Save.data.skills.rank | 0) > 1) notes.push(`Someone pinned a scrap: fisher rank ${Save.data.skills.rank}.`);
-    if (typeof Cottage !== "undefined" && !Cottage.hasSlot("shelf")) {
+    if (typeof Cottage !== "undefined" && Cottage.decorOn() && !Cottage.hasSlot("shelf")) {
       notes.push("Wren: cottage goods on the counter — a wall shelf if you have forty coins.");
     }
     MillSpine.tickHeard();

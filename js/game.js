@@ -353,6 +353,8 @@ const UI = {
     } else {
       this.els.prompt.classList.add("hidden");
     }
+    if (!this._packBtn) this._packBtn = document.getElementById("btn-packup");
+    if (this._packBtn) this._packBtn.classList.toggle("is-on", Fishing.state === "aim" && !this.anyMenu());
   },
 };
 
@@ -407,7 +409,7 @@ const Game = {
       window.addEventListener("visibilitychange", () => { if (document.hidden) Save.write(); });
       window.addEventListener("pagehide", () => Save.write());
       const hint = document.getElementById("hint");
-      if (hint) hint.textContent = "J Journal · I Pack · F8 Admin";
+      if (hint) hint.textContent = "J Journal · I Pack";
       Camera.x = Player.x - CONFIG.VIEW_W * 0.5;
       Camera.y = Player.y - CONFIG.VIEW_H * 0.58;
       Camera.clampToWorld(World.pw, World.ph);
