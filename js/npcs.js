@@ -240,7 +240,9 @@ const Interact = {
     if (World.id !== "cottage") {
       for (const d of World.decos) {
         const dist = Utils.dist(px, py, d.x, d.y);
-        if (d.type === "waterSign" || d.type === "sign") offer("sign", dist, DESIGN.signRange, d);
+        if (d.type === "waterSign" || d.type === "sign") {
+          if (!this._signYields(d)) offer("sign", dist, DESIGN.signRange, d);
+        }
         else if (d.type === "crate") offer("crate", dist, DESIGN.crateRange, d);
         else if (d.type === "raft" && d.boat) offer("boat", dist, DESIGN.boatRange, d);
         else if (d.type === "stump" && d.sit) offer("sit", dist, DESIGN.sitRange, d);
@@ -250,6 +252,17 @@ const Interact = {
       offer("weeds", Utils.dist(px, py, 27.5 * TILE_SIZE, 24.4 * TILE_SIZE), 28, null);
     }
     return best;
+  },
+
+  /* With water in casting reach, a sign only takes E when the player faces it. Facing water always means fish. */
+  _signYields(d) {
+    if (!World.nearestWater(Player.x, Player.y, CONFIG.FISH_RANGE)) return false;
+    const dx = d.x - Player.x, dy = d.y - Player.y;
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+    const dir = Player.dir; // 0 down, 1 left, 2 right, 3 up
+    const facing = (dir === 0 && dy > 0 && ay >= ax) || (dir === 3 && dy < 0 && ay >= ax)
+      || (dir === 1 && dx < 0 && ax >= ay) || (dir === 2 && dx > 0 && ax >= ay);
+    return !facing;
   },
 
   _readSign(d) {
