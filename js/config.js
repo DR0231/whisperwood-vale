@@ -69,10 +69,11 @@ const DESIGN = {
   needCrit: 10,
   hungerBarShrink: 20,
   passOutHunger: 15,
-  /* Waking in the reeds: share of the equipped bait Wren "lost" carrying you home (never journal, coins, rods, or flags), and where the needs settle. */
-  passOutBaitNibble: 0.2,
+  /* Waking in the reeds: where the needs settle. Losing the night is the whole cost; nothing is taken. */
   passOutNeeds: 60,
   emptyHookBite: 0.45,
+  /* Bare hook perk: an empty hook bites like a baited one. No bait bias, so it never changes which fish bites. */
+  bareHookBite: 0.72,
   /* "Running low" note once the equipped bait drops under this. At 0 the hook goes empty; nothing auto-swaps. */
   baitLowWarn: 3,
   caveWrongBait: 0.42,
@@ -475,7 +476,7 @@ const PERKS = {
   forager:     { id: "forager",     name: "Forager", desc: "Sometimes the path yields a little extra." },
   campcook:    { id: "campcook",    name: "Camp cook", desc: "Meals restore more and last an extra sleep." },
   homeshore:   { id: "homeshore",   name: "Home shore", desc: "Your favorite water bites like a mild hotspot." },
-  softlanding: { id: "softlanding", name: "Soft landing", desc: "Waking in the reeds costs no bait." },
+  barehook:    { id: "barehook",    name: "Bare hook",    desc: "An empty hook waits like a baited one." },
 };
 
 const NPC_DATA = [

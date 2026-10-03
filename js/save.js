@@ -125,6 +125,10 @@ const Save = {
     out.skills.sightXp = Object.assign({}, (d.skills && d.skills.sightXp) || {});
     if (!Array.isArray(out.skills.perks)) out.skills.perks = [];
     if (!Array.isArray(out.skills.offered)) out.skills.offered = [];
+    out.skills.perks = out.skills.perks.map((id) => (id === "softlanding" ? "barehook" : id))
+      .filter((id, i, a) => PERKS[id] && a.indexOf(id) === i);
+    out.skills.offered = out.skills.offered.map((id) => (id === "softlanding" ? "barehook" : id))
+      .filter((id, i, a) => PERKS[id] && a.indexOf(id) === i && out.skills.perks.indexOf(id) < 0);
     if (!out.skills.rank) out.skills.rank = 1;
     out.cottage = Object.assign({}, base.cottage, d.cottage || {});
     for (const k of ["aquarium", "trophies", "mail"]) {
