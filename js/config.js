@@ -318,7 +318,7 @@ const FISH = [
     baitBias: { worms: 0.8, crickets: 2.2, glow: 0.3, berryblend: 1.1, glowplus: 0.25 } },
   { id: "mistbass", name: "Mist Bass", spot: "lake", rarity: "Common",
     color: "#3a5a8a", desc: "Lurks under the lake fog until dusk.",
-    size: [8, 16], sell: 10, bite: { dawn: 0.7, day: 0.9, golden: 1.3, night: 1.1 },
+    size: [8, 16], sell: 10, bite: { dawn: 0.7, day: 0.5, golden: 1.6, night: 1.1 },
     baitBias: { worms: 1.7, crickets: 0.8, glow: 0.5, berryblend: 1.3, glowplus: 0.45 } },
   { id: "moonfin", name: "Moonfin", spot: "lake", rarity: "Rare",
     color: "#c8d8f0", desc: "Pale fins that catch starlight on open water.",
@@ -368,6 +368,10 @@ const FISH = [
     color: "#c8b090", desc: "A heavy windward fish. The swell remembers its weight.",
     size: [14, 26], sell: 40, bite: { dawn: 0.4, day: 0.45, golden: 1.15, night: 1.5 },
     baitBias: { worms: 0.3, crickets: 0.25, glow: 1.4, berryblend: 0.35, glowplus: 2.4 } },
+  { id: "hopperbream", name: "Hopper Bream", spot: "lake", rarity: "Uncommon",
+    color: "#a89a44", desc: "Rises at midday for crickets that blow off the bank grass.",
+    size: [6, 12], sell: 12, bite: { dawn: 1, day: 1.3, golden: 0.8, night: 0.3 },
+    baitBias: { worms: 0.7, crickets: 2.0, glow: 0.4, berryblend: 0.8, glowplus: 0.35 } },
 ];
 
 const SEASONS = ["spring", "summer", "autumn", "winter"];

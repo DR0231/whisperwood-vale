@@ -47,7 +47,7 @@ const Save = {
         stew: 0,
         stewFrom: { plain: 0 },
       },
-      skills: { rank: 1, xp: 0, perks: [], offered: [], repeatsToday: { total: 0 }, speciesToday: {}, sightXp: {} },
+      skills: { rank: 1, xp: 0, perks: [], offered: [], repeatsToday: { total: 0 }, speciesToday: {}, recordToday: {}, sightXp: {} },
       journal,
       cottage: { aquarium: [], trophies: [], mail: [], weeds: 0, decor: {}, visited: false, cooler: [] },
       npcs,
@@ -121,6 +121,7 @@ const Save = {
     out.skills = Object.assign({}, base.skills, d.skills || {});
     out.skills.repeatsToday = Object.assign({ total: 0 }, (d.skills && d.skills.repeatsToday) || {});
     out.skills.speciesToday = Object.assign({}, (d.skills && d.skills.speciesToday) || {});
+    out.skills.recordToday = Object.assign({}, (d.skills && d.skills.recordToday) || {});
     out.skills.sightXp = Object.assign({}, (d.skills && d.skills.sightXp) || {});
     if (!Array.isArray(out.skills.perks)) out.skills.perks = [];
     if (!Array.isArray(out.skills.offered)) out.skills.offered = [];
