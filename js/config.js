@@ -522,6 +522,10 @@ const DAILY_ASKS = [
   { spot: "river", fish: "swiftdarter", text: "Land a Swift Darter before night." },
   { spot: "lake", fish: "mistbass", text: "A Mist Bass off the east dock." },
   { spot: "cave", fish: "glowminnow", text: "A Glow Minnow from the cave lake." },
+  { spot: "marsh", fish: "fogperch", text: "A Fog Perch from the millpond." },
+  { spot: "marsh", fish: "bogwhisker", text: "A Bog Whisker for Lark’s pot." },
+  { spot: "island", fish: "tideperch", text: "A Tide Perch off Windward Reach." },
+  { spot: "island", fish: "duskrunner", text: "Land a Dusk Runner as the light goes." },
 ];
 
 /* Placeholder mill-spine mail. Ivy polish later. Boat gate stays flags.fifthWater. */

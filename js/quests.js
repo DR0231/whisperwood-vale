@@ -5,7 +5,8 @@ const Quests = {
 
   rollDay() {
     const rng = Save.dayRng("quests");
-    const ask = Utils.pick(rng, DAILY_ASKS);
+    const pool = DAILY_ASKS.filter((a) => this._askOpen(a.spot));
+    const ask = Utils.pick(rng, pool.length ? pool : DAILY_ASKS);
     Save.data.quests.daily = {
       day: Save.data.clock.day,
       fish: ask.fish,
@@ -35,6 +36,13 @@ const Quests = {
     if (!key) Save.data.quests.derby.key = "";
     MillSpine.tickHeard();
     this._biasRumor(rng);
+  },
+
+  _askOpen(spot) {
+    const f = (Save.data && Save.data.flags) || {};
+    if (spot === "marsh") return !!f.fifthWater;
+    if (spot === "island") return typeof Island !== "undefined" && Island.open();
+    return true;
   },
 
   _biasRumor(rng) {
