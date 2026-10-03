@@ -484,6 +484,7 @@ const NPC_DATA = [
     id: "wren", name: "Wren", role: "shop",
     x: 35.8 * 16, y: 26.8 * 16,
     color: "#c45a5a",
+    fav: "stonetrout", favBait: ["crickets", 2],
     greet: "Need bait? The board by my stall has today’s ask.",
     hearts: [
       "Bring me something river-bright and I’ll remember you.",
@@ -495,6 +496,7 @@ const NPC_DATA = [
     id: "bramble", name: "Bramble", role: "fisher",
     x: 23.4 * 16, y: 27.4 * 16,
     color: "#5a8a48",
+    fav: "sunperch",   favBait: ["worms", 3],
     greet: "Pond’s kind if you wait. I like a patient neighbor.",
     hearts: [
       "A sunperch for the pan wouldn’t go amiss.",
@@ -506,6 +508,7 @@ const NPC_DATA = [
     id: "lark", name: "Lark", role: "rumor",
     x: 39.6 * 16, y: 21.6 * 16,
     color: "#7a6ab0",
+    fav: "mistbass",   favBait: ["glow", 1],
     greet: "I collect almosts. The ones that got away still count.",
     hearts: [
       "Tell me if the lake coughs up a rumor.",

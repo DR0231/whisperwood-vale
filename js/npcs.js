@@ -64,16 +64,35 @@ const Npcs = {
       this._show(n.name, "One gift a day is plenty.", n);
       return;
     }
-    const extra = FISH.find((f) => Save.countLoose(f.id) >= DESIGN.giftMinCaught);
-    if (!extra) {
-      this._show(n.name, "Keep the first of each. Bring me a duplicate sometime.", n);
+    const min = DESIGN.giftMinCaught;
+    const favFish = n.fav ? FISH.find((f) => f.id === n.fav) : null;
+    let give = null;
+    if (favFish && Save.countLoose(favFish.id) >= min) give = favFish;
+    if (!give) {
+      let best = 0;
+      for (const f of FISH) {
+        if (f.rarity === "Rare") continue;
+        const c = Save.countLoose(f.id);
+        if (c >= min && c > best) { best = c; give = f; }
+      }
+    }
+    if (!give) {
+      this._show(n.name, favFish ? `Keep the first of each. Bring me a spare ${favFish.name} sometime.` : "Keep the first of each. Bring me a duplicate sometime.", n);
       return;
     }
-    Save.takeOldestLoose(extra.id);
+    Save.takeOldestLoose(give.id);
     Save.syncCaught();
     st.giftedToday = 1;
     st.hearts = Math.min(DESIGN.npcHeartCap, (st.hearts | 0) + 1);
-    this._show(n.name, n.hearts[st.hearts - 1] || "That’s kind.", n);
+    let line;
+    if (favFish && give.id === favFish.id) {
+      const fb = n.favBait;
+      if (fb && BAIT[fb[0]]) Inventory.addBait(fb[0], fb[1] | 0);
+      line = `A ${give.name}! You remembered.` + (fb && BAIT[fb[0]] ? ` Take ${fb[1] === 1 ? "this" : "these"} ${BAIT[fb[0]].name.toLowerCase()}.` : "");
+    } else {
+      line = `A ${give.name}. Kind of you.` + (favFish ? ` I’m partial to a ${favFish.name}, though.` : "");
+    }
+    this._show(n.name, line, n);
     Save.mark("gift");
     this._checkMarsh();
   },
