@@ -85,12 +85,13 @@ const Npcs = {
     st.giftedToday = 1;
     st.hearts = Math.min(DESIGN.npcHeartCap, (st.hearts | 0) + 1);
     let line;
+    const article = Utils.an(give.name, true);
     if (favFish && give.id === favFish.id) {
       const fb = n.favBait;
       if (fb && BAIT[fb[0]]) Inventory.addBait(fb[0], fb[1] | 0);
-      line = `A ${give.name}! You remembered.` + (fb && BAIT[fb[0]] ? ` Take ${fb[1] === 1 ? "this" : "these"} ${BAIT[fb[0]].name.toLowerCase()}.` : "");
+      line = (n.giftFav || "{A}! You remembered.").replace("{A}", article) + (fb && BAIT[fb[0]] ? ` Take ${fb[1] === 1 ? "this" : "these"} ${BAIT[fb[0]].name.toLowerCase()}.` : "");
     } else {
-      line = `A ${give.name}. Kind of you.` + (favFish ? ` I’m partial to a ${favFish.name}, though.` : "");
+      line = (n.giftOther || "{A}. Kind of you.").replace("{A}", article);
     }
     this._show(n.name, line, n);
     Save.mark("gift");

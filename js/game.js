@@ -151,12 +151,28 @@ const UI = {
         const heading = MillSpine.stage() === "turning"
           ? MILL_END_COPY.journalDone
           : `${MILL_END_COPY.journal} · ${n} / ${ids.length}`;
-        mill.innerHTML = `<p>${heading}</p>` + ids.map((id) => {
+        const turning = MillSpine.stage() === "turning";
+        const page = turning ? "" : `<p class="ink-soft">${MILL_END_COPY.page}</p>`;
+        const hunger = turning ? "" : `<p class="ink-soft">${MILL_END_COPY.hunger}</p>`;
+        mill.innerHTML = `<p>${heading}</p>${page}` + ids.map((id) => {
           const f = FISH.find((x) => x.id === id);
           const landed = Journal.landed(id);
-          const when = f.season ? ("best in " + f.season) : (f.nightOnly ? "only at night" : "any season");
-          return `<div class="mill-rare"><canvas width="40" height="26" data-mill="${id}"></canvas><div>${landed ? f.name : "???"}</div><div class="ink-soft">${SPOTS[f.spot].name} · ${when}</div></div>`;
-        }).join("");
+          let label = "";
+          if (f.season) {
+            const sd = DESIGN.seasonDays;
+            const day = Save.data.clock.day | 0;
+            const t = SEASONS.indexOf(f.season);
+            const cur = Math.floor((day - 1) / sd) % 4;
+            if (cur === t) label = f.season + " only · now";
+            else {
+              let start = Math.floor((day - 1) / (4 * sd)) * 4 * sd + t * sd + 1;
+              if (start <= day) start += 4 * sd;
+              label = f.season + " only · next " + f.season + ": day " + start;
+            }
+          } else if (f.nightOnly) label = "nights only";
+          const where = label ? `${SPOTS[f.spot].name} · ${label}` : SPOTS[f.spot].name;
+          return `<div class="mill-rare"><canvas width="40" height="26" data-mill="${id}"></canvas><div>${landed ? f.name : "???"}</div><div class="ink-soft">${where}</div></div>`;
+        }).join("") + hunger;
         mill.querySelectorAll("canvas").forEach((cv) => {
           const f = FISH.find((x) => x.id === cv.dataset.mill);
           const c = cv.getContext("2d");
@@ -289,9 +305,11 @@ const UI = {
       if (this.toastT <= 0) {
         if (this.els.toast) this.els.toast.classList.add("hidden");
         if (typeof Stamps !== "undefined") Stamps.flush();
+        try { if (typeof MillSpine !== "undefined") MillSpine.flushNote(); } catch (e) { /* mill note optional */ }
       }
     } else if (typeof Stamps !== "undefined") {
       Stamps.flush();
+      try { if (typeof MillSpine !== "undefined") MillSpine.flushNote(); } catch (e) { /* mill note optional */ }
     }
 
     this.els.clockText.textContent = TimeCycle.clockLabel();

@@ -487,6 +487,8 @@ const NPC_DATA = [
     x: 35.8 * 16, y: 26.8 * 16,
     color: "#c45a5a",
     fav: "stonetrout", favBait: ["crickets", 2],
+    giftFav: "{A}, still cold from the north river. You remembered.",
+    giftOther: "{A}. Kind of you. A Stone Trout would’ve had me grinning.",
     greet: "Need bait? The board by my stall has today’s ask.",
     hearts: [
       "Bring me something river-bright and I’ll remember you.",
@@ -499,6 +501,8 @@ const NPC_DATA = [
     x: 23.4 * 16, y: 27.4 * 16,
     color: "#5a8a48",
     fav: "sunperch",   favBait: ["worms", 3],
+    giftFav: "{A}! The pan’s already warm. You remembered.",
+    giftOther: "{A}. Kind of you. I’d still trade it for a Sunperch.",
     greet: "Pond’s kind if you wait. I like a patient neighbor.",
     hearts: [
       "A sunperch for the pan wouldn’t go amiss.",
@@ -511,6 +515,8 @@ const NPC_DATA = [
     x: 39.6 * 16, y: 21.6 * 16,
     color: "#7a6ab0",
     fav: "mistbass",   favBait: ["glow", 1],
+    giftFav: "{A}, fog still on it. You remembered.",
+    giftOther: "{A}. I’ll write it down. A Mist Bass is what I keep hoping for.",
     greet: "I collect almosts. The ones that got away still count.",
     hearts: [
       "Tell me if the lake coughs up a rumor.",
@@ -527,29 +533,32 @@ const DAILY_ASKS = [
   { spot: "river", fish: "swiftdarter", text: "Land a Swift Darter before night." },
   { spot: "lake", fish: "mistbass", text: "A Mist Bass off the east dock." },
   { spot: "cave", fish: "glowminnow", text: "A Glow Minnow from the cave lake." },
-  { spot: "marsh", fish: "fogperch", text: "A Fog Perch from the millpond." },
-  { spot: "marsh", fish: "bogwhisker", text: "A Bog Whisker for Lark’s pot." },
-  { spot: "island", fish: "tideperch", text: "A Tide Perch off Windward Reach." },
-  { spot: "island", fish: "duskrunner", text: "Land a Dusk Runner as the light goes." },
+  { spot: "marsh", fish: "fogperch", text: "A Fog Perch from the millpond reeds." },
+  { spot: "marsh", fish: "bogwhisker", text: "A Bog Whisker from the mill race, come evening." },
+  { spot: "island", fish: "tideperch", text: "A Tide Perch from the warm shallows." },
+  { spot: "island", fish: "duskrunner", text: "Land a Dusk Runner before the copper’s gone." },
 ];
 
 /* Placeholder mill-spine mail. Ivy polish later. Boat gate stays flags.fifthWater. */
 const MILL_SPINE_MAIL = {
-  heard: "Lark: “The east mill went quiet. Used to hear the wheel from the lake path — now it doesn’t turn.” Bramble swears it turns again for whoever lands the vale’s five rare fish.",
+  heard: "Lark: “The east mill went quiet. Used to hear the wheel from the lake path.” The old millers say it turns again when someone lands the vale’s five rare fish.",
   opened: "Bramble: “East boat’s free. Mill’s still silent, though. Take berries if you go.”",
   visited: "The mill wheel doesn’t turn. Reeds keep the rest of the story.",
-  done: "The mill keeps its silence — but you were there. — Wren",
-  turning: "Lark: “Heard the mill wheel from the lake path this morning. It’s turning again.”",
+  done: "Still quiet at the mill — but you were there. Someone’s untied the island boat. — Wren",
+  turning: "Lark: “Heard the wheel from the lake path this morning. I’d nearly forgotten the sound.”",
 };
 
 const MILL_END_COPY = {
-  kicker: "The mill story is complete",
+  kicker: "You’ve finished Whisperwood Vale",
   title: "The wheel turns",
-  body: "Five rare fish, all landed. Overnight the east mill woke, and its wheel turns again.",
+  body: "Five rare fish, all landed. In the night the east mill woke, and you can hear its wheel from the lake path.",
   button: "Keep fishing",
-  sign: "The mill wheel turns. The reeds lean with it.",
-  journal: "Five rares wake the mill",
-  journalDone: "The mill wheel turns",
+  sign: "The wheel turns. The reeds lean with it.",
+  journal: "Five rares to turn the wheel",
+  journalDone: "The mill wheel turns again",
+  page: "Five shapes in the margin. Fill them and the wheel turns.",
+  hunger: "The rares won’t bite on an empty stomach. Supper first.",
+  note: "Mail in the tray. It’s about the mill.",
 };
 
 const MILL_SPINE_RUMOR_QUIET = "The east boat is still lashed. Folks say the mill went quiet.";

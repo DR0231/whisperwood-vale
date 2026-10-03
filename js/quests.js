@@ -187,7 +187,17 @@ const MillSpine = {
     if ((Save.data.clock.day | 0) < 2) return;
     this._set("heard");
     this.pushLetter("heard");
+    this._heardNote = true;
     Save.mark();
+  },
+
+  flushNote() {
+    if (!this._heardNote) return;
+    if (typeof Game !== "undefined" && Game.sleeping) return;
+    if (typeof UI !== "undefined" && UI.toastT > 0) return;
+    if (typeof Stamps !== "undefined" && Stamps._fight()) return;
+    this._heardNote = false;
+    UI.toastNote(MILL_END_COPY.note);
   },
 
   onOpened() {

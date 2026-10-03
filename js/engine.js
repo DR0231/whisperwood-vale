@@ -33,6 +33,7 @@ const Utils = {
     ];
   },
   rgba(c) { return `rgba(${c[0]},${c[1]},${c[2]},${c[3]})`; },
+  an(s, cap) { return (/^[aeiou]/i.test(s) ? (cap ? "An" : "an") : (cap ? "A" : "a")) + " " + String(s); },
 };
 
 function mulberry32(seed) {
