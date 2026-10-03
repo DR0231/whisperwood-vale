@@ -53,6 +53,8 @@ const CONFIG = {
 const DESIGN = {
   millpondUnique: 10,
   millpondHearts: 2,
+  millEndRares: ["moonfin", "nighteel", "crystalfin", "pearlcarp", "galeor"],
+  millWheelStep: 0.35,
   npcHeartCap: 3,
   giftMinCaught: 2,
   xpFirstLand: 40,
@@ -533,10 +535,21 @@ const DAILY_ASKS = [
 
 /* Placeholder mill-spine mail. Ivy polish later. Boat gate stays flags.fifthWater. */
 const MILL_SPINE_MAIL = {
-  heard: "Lark: “The east mill went quiet. Used to hear the wheel from the lake path — now it doesn’t turn.”",
+  heard: "Lark: “The east mill went quiet. Used to hear the wheel from the lake path — now it doesn’t turn.” Bramble swears it turns again for whoever lands the vale’s five rare fish.",
   opened: "Bramble: “East boat’s free. Mill’s still silent, though. Take berries if you go.”",
   visited: "The mill wheel doesn’t turn. Reeds keep the rest of the story.",
   done: "The mill keeps its silence — but you were there. — Wren",
+  turning: "Lark: “Heard the mill wheel from the lake path this morning. It’s turning again.”",
+};
+
+const MILL_END_COPY = {
+  kicker: "The mill story is complete",
+  title: "The wheel turns",
+  body: "Five rare fish, all landed. Overnight the east mill woke, and its wheel turns again.",
+  button: "Keep fishing",
+  sign: "The mill wheel turns. The reeds lean with it.",
+  journal: "Five rares wake the mill",
+  journalDone: "The mill wheel turns",
 };
 
 const MILL_SPINE_RUMOR_QUIET = "The east boat is still lashed. Folks say the mill went quiet.";

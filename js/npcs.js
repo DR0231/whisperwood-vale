@@ -35,7 +35,7 @@ const Npcs = {
     const spine = typeof MillSpine !== "undefined" ? MillSpine.stage() : "none";
     const visits = (st.talks = (st.talks | 0) + 1);
     let line;
-    if ((n.id === "bramble" || n.id === "lark") && spine !== "none" && spine !== "done" && visits % 2 === 1) {
+    if ((n.id === "bramble" || n.id === "lark") && spine !== "none" && !(typeof MillSpine !== "undefined" && MillSpine.atLeast("done")) && visits % 2 === 1) {
       line = "The east mill’s gone quiet.";
     } else if (st.lastCatchRemembered && visits % 3 === 0) {
       line = `That ${st.lastCatchRemembered} still sits with me.`;
@@ -291,7 +291,8 @@ const Interact = {
       const s = SPOTS[d.spot];
       UI.toastNote(Journal.signText(d.spot), s ? s.name : "Water");
     } else {
-      UI.toastNote(d.read || "The paint has worn away.", d.title || "Sign");
+      const turning = d.readTurning && typeof MillSpine !== "undefined" && MillSpine.stage() === "turning";
+      UI.toastNote(turning ? d.readTurning : (d.read || "The paint has worn away."), d.title || "Sign");
     }
     return true;
   },

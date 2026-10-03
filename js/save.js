@@ -57,7 +57,7 @@ const Save = {
         rumor: { day: 0, fish: "", spot: "", text: "" },
         derby: { key: "", mood: "still", landed: 0, goal: 8 },
       },
-      flags: { fifthWater: false, spotMastery: {}, introComplete: false, mute: false, campfire: false, passedOutDay: 0, cooked: {}, gotCampKit: false, millSpine: "none", stamps: {}, islandOpen: false, onboard: {}, stewLetter: false },
+      flags: { fifthWater: false, spotMastery: {}, introComplete: false, mute: false, campfire: false, passedOutDay: 0, cooked: {}, gotCampKit: false, millSpine: "none", millEndDay: 0, millEndSeen: false, stamps: {}, islandOpen: false, onboard: {}, stewLetter: false },
       recap: [],
     };
   },
@@ -158,8 +158,10 @@ const Save = {
     if (!Array.isArray(out.quests.done)) out.quests.done = [];
     out.flags = Object.assign({}, base.flags, d.flags || {});
     out.flags.cooked = Object.assign({}, base.flags.cooked, (d.flags && d.flags.cooked) || {});
-    const spineOk = { none: 1, heard: 1, opened: 1, visited: 1, done: 1 };
+    const spineOk = { none: 1, heard: 1, opened: 1, visited: 1, done: 1, turning: 1 };
     if (!spineOk[out.flags.millSpine]) out.flags.millSpine = "none";
+    out.flags.millEndDay = out.flags.millEndDay | 0;
+    out.flags.millEndSeen = out.flags.millEndSeen === true;
     if (out.flags.islandOpen !== true) out.flags.islandOpen = false;
     if (!out.flags.onboard || typeof out.flags.onboard !== "object") out.flags.onboard = {};
     /* Older saves never saw the nudges; anyone who has played a while does not need them. */

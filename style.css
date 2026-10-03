@@ -870,6 +870,11 @@ kbd {
 .shop-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 #journal-list li.favorite { outline: 2px solid #c4a05a; }
 .journal-cook { margin-top: 8px; font-size: 12px; color: #5a3a22; }
+#mill-end-scene { display: block; width: 192px; height: 96px; margin: 6px auto; image-rendering: pixelated; }
+.journal-mill { display: flex; flex-wrap: wrap; gap: 8px; }
+.journal-mill.hidden { display: none; }
+.journal-mill > p { flex: 1 0 100%; margin: 8px 0 0; }
+.journal-mill .mill-rare { width: 72px; text-align: center; }
 
 .parchment-panel {
   background: #f3e6c8;

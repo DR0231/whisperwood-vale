@@ -145,7 +145,7 @@ const Quests = {
 const Board = Quests;
 
 const MillSpine = {
-  _order: ["none", "heard", "opened", "visited", "done"],
+  _order: ["none", "heard", "opened", "visited", "done", "turning"],
 
   stage() {
     return (Save.data && Save.data.flags && Save.data.flags.millSpine) || "none";
@@ -211,13 +211,114 @@ const MillSpine = {
   onMillfin(fish) {
     if (!fish || fish.id !== "millfin") return;
     if (!this.atLeast("visited")) return;
-    if (this.stage() === "done") return;
+    if (this.atLeast("done")) return;
     this._set("done");
     this.pushLetter("done");
     UI.toastNote("The mill keeps its silence — but you were there.");
     try { if (typeof Stamps !== "undefined") Stamps.try("millQuiet"); } catch (e) { /* stamp optional */ }
     try { if (typeof Island !== "undefined") Island.onQuiet(); } catch (e) { /* island optional */ }
     Save.mark();
+  },
+
+  tickTurning() {
+    if (!Save.data || this.stage() !== "done") return;
+    const ids = DESIGN.millEndRares || [];
+    for (let i = 0; i < ids.length; i++) {
+      if (typeof Journal === "undefined" || !Journal.landed(ids[i])) return;
+    }
+    this._set("turning");
+    Save.data.flags.millEndDay = Save.clockDay();
+    Save.data.flags.millEndSeen = false;
+    this.pushLetter("turning");
+    Save.mark();
+    MillEnd.open();
+  },
+};
+
+const MillEnd = {
+  openFlag: false,
+
+  open() {
+    this.openFlag = true;
+    if (typeof UI !== "undefined") UI.closeJournal();
+    if (typeof Inventory !== "undefined") Inventory.close();
+    if (typeof Shop !== "undefined") Shop.close();
+    if (typeof Board !== "undefined") Board.close();
+    if (typeof Mail !== "undefined") Mail.close();
+    if (typeof Bench !== "undefined") Bench.close();
+    if (typeof Tank !== "undefined") Tank.close();
+    if (typeof Cooler !== "undefined") Cooler.close();
+    if (typeof Trophy !== "undefined") Trophy.close();
+    if (typeof Cert !== "undefined") Cert.close();
+    const el = document.getElementById("mill-end");
+    if (el) el.classList.remove("hidden");
+    this.refresh();
+  },
+
+  close() {
+    if (!this.openFlag) return;
+    this.openFlag = false;
+    const el = document.getElementById("mill-end");
+    if (el) el.classList.add("hidden");
+    if (Save.data && Save.data.flags && Save.data.flags.millEndSeen !== true) {
+      Save.data.flags.millEndSeen = true;
+      Save.mark();
+    }
+  },
+
+  refresh() {
+    const C = MILL_END_COPY;
+    const kicker = document.getElementById("mill-end-kicker");
+    const title = document.getElementById("mill-end-title");
+    const btn = document.getElementById("mill-end-btn");
+    if (kicker) kicker.textContent = C.kicker;
+    if (title) title.textContent = C.title;
+    if (btn) btn.textContent = C.button;
+    const el = document.getElementById("mill-end-body");
+    if (!el) return;
+    const rares = (DESIGN.millEndRares || []).map((id) => {
+      const f = FISH.find((x) => x.id === id);
+      const e = Journal.ensure(id);
+      const day = (e.firstDay | 0) > 0 ? (e.firstDay | 0) : 0;
+      return `<li class="stamp-open"><span class="stamp-seal is-ink" aria-hidden="true"></span><span class="stamp-title">${f ? f.name : id}</span><span class="stamp-day">Day ${day}</span></li>`;
+    }).join("");
+    let landedSum = 0;
+    let bestName = "";
+    let best = -1;
+    for (const f of FISH) {
+      const e = Journal.ensure(f.id);
+      landedSum += e.landed | 0;
+      if ((e.biggest || 0) > best) {
+        best = e.biggest || 0;
+        bestName = e.biggest ? f.name : bestName;
+      }
+    }
+    if (!bestName) {
+      for (const f of FISH) {
+        const e = Journal.ensure(f.id);
+        if ((e.landed | 0) > 0) { bestName = f.name; best = e.biggest || 0; break; }
+      }
+    }
+    const stats = [
+      `Day ${Save.data.flags.millEndDay | 0}`,
+      `${Journal.count()} / ${FISH.length} species in the book`,
+      `${landedSum} fish landed`,
+      `Biggest: ${bestName}, ${best}"`,
+    ].map((s) => `<p class="ink-soft">${s}</p>`).join("");
+    el.innerHTML = `<p>${C.body}</p><ul class="stamp-list">${rares}</ul>${stats}`;
+  },
+
+  drawScene(t) {
+    const canvas = document.getElementById("mill-end-scene");
+    if (!canvas) return;
+    const c = canvas.getContext("2d");
+    if (!c) return;
+    c.imageSmoothingEnabled = false;
+    c.fillStyle = "#d8c0a0";
+    c.fillRect(0, 0, 96, 36);
+    c.fillStyle = "#3a5a48";
+    c.fillRect(0, 36, 96, 12);
+    Sprites.mill(c, 56, 44, t);
   },
 };
 
@@ -263,12 +364,14 @@ const Mail = {
     MillSpine.tickHeard();
     Save.data.cottage.mail = notes.slice(0, MillSpine.mailCap());
     const mail = Save.data.cottage.mail;
-    const beats = ["heard", "opened", "visited", "done"];
+    const beats = ["heard", "opened", "visited", "done", "turning"];
+    let latest = "";
     for (let i = 0; i < beats.length; i++) {
-      const beat = beats[i];
-      if (!MillSpine.atLeast(beat)) continue;
-      const text = MILL_SPINE_MAIL[beat];
-      if (!text) continue;
+      if (!MillSpine.atLeast(beats[i])) continue;
+      if (MILL_SPINE_MAIL[beats[i]]) latest = beats[i];
+    }
+    if (latest) {
+      const text = MILL_SPINE_MAIL[latest];
       const at = mail.indexOf(text);
       if (at >= 0) mail.splice(at, 1);
       mail.unshift(text);

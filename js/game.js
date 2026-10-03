@@ -13,6 +13,7 @@ const UI = {
       || (typeof Cooler !== "undefined" && Cooler.openFlag)
       || (typeof Trophy !== "undefined" && Trophy.openFlag)
       || (typeof Cert !== "undefined" && Cert.openFlag)
+      || (typeof MillEnd !== "undefined" && MillEnd.openFlag)
       || Skills.offering
       || (typeof Admin !== "undefined" && Admin.open);
   },
@@ -141,6 +142,36 @@ const UI = {
       const stampMax = typeof STAMPS !== "undefined" ? STAMPS.length : 6;
       cook.textContent = "Cookbook: " + names.join(" · ") + ` · Stamps ${stampN}/${stampMax}`;
     }
+    const mill = document.getElementById("journal-mill");
+    if (mill) {
+      if (typeof MillSpine !== "undefined" && MillSpine.atLeast("heard")) {
+        mill.classList.remove("hidden");
+        const ids = DESIGN.millEndRares || [];
+        const n = ids.filter((id) => Journal.landed(id)).length;
+        const heading = MillSpine.stage() === "turning"
+          ? MILL_END_COPY.journalDone
+          : `${MILL_END_COPY.journal} · ${n} / ${ids.length}`;
+        mill.innerHTML = `<p>${heading}</p>` + ids.map((id) => {
+          const f = FISH.find((x) => x.id === id);
+          const landed = Journal.landed(id);
+          const when = f.season ? ("best in " + f.season) : (f.nightOnly ? "only at night" : "any season");
+          return `<div class="mill-rare"><canvas width="40" height="26" data-mill="${id}"></canvas><div>${landed ? f.name : "???"}</div><div class="ink-soft">${SPOTS[f.spot].name} · ${when}</div></div>`;
+        }).join("");
+        mill.querySelectorAll("canvas").forEach((cv) => {
+          const f = FISH.find((x) => x.id === cv.dataset.mill);
+          const c = cv.getContext("2d");
+          c.imageSmoothingEnabled = false;
+          c.clearRect(0, 0, 40, 26);
+          c.save();
+          c.translate(16, 13);
+          Sprites.fishIcon(c, 0, 0, f, !Journal.landed(f.id));
+          c.restore();
+        });
+      } else {
+        mill.classList.add("hidden");
+        mill.innerHTML = "";
+      }
+    }
   },
 
   toggleJournal() {
@@ -151,6 +182,7 @@ const UI = {
     if (typeof Cooler !== "undefined") Cooler.close();
     if (typeof Trophy !== "undefined") Trophy.close();
     if (typeof Cert !== "undefined") Cert.close();
+    if (typeof MillEnd !== "undefined") MillEnd.close();
     // Journal pauses movement and world time, but is not a bite-timer exploit:
     // wait/nibble packs up the rod; an open minigame fails on the spot.
     if (Fishing.state === "wait" || Fishing.state === "nibble") Fishing.cancel();
@@ -179,6 +211,7 @@ const UI = {
     if (typeof Admin !== "undefined") Admin.close();
     if (typeof Trophy !== "undefined") Trophy.close();
     if (typeof Cert !== "undefined") Cert.close();
+    if (typeof MillEnd !== "undefined") MillEnd.close();
   },
 
   showCatch(fish, rec) {
@@ -442,6 +475,10 @@ const Game = {
     if (UI.els.start) UI.els.start.classList.add("hidden");
     Save.data.flags.introComplete = true;
     try { if ((Save.data.skills.offered || []).length && !Skills.offering) Skills._showOffer(); } catch (e) { /* offer optional */ }
+    try {
+      if (typeof MillSpine !== "undefined" && MillSpine.stage() === "turning"
+        && Save.data.flags && !Save.data.flags.millEndSeen && !Skills.offering) MillEnd.open();
+    } catch (e) { /* mill card optional */ }
     if (UI.els.btn) UI.els.btn.blur();
     const canvas = document.getElementById("game");
     try { if (canvas) canvas.focus({ preventScroll: true }); } catch (e) { /* focus optional */ }
@@ -559,6 +596,7 @@ const Game = {
     Cottage.wakeBesideBed();
     this.sleeping = null;
     this.sleepCool = 0.45;
+    try { MillSpine.tickTurning(); } catch (e) { /* mill ending optional */ }
   },
 
   _updateSit(dt) {
