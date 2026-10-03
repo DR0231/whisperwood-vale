@@ -441,6 +441,7 @@ const Game = {
     }
     if (UI.els.start) UI.els.start.classList.add("hidden");
     Save.data.flags.introComplete = true;
+    try { if ((Save.data.skills.offered || []).length && !Skills.offering) Skills._showOffer(); } catch (e) { /* offer optional */ }
     if (UI.els.btn) UI.els.btn.blur();
     const canvas = document.getElementById("game");
     try { if (canvas) canvas.focus({ preventScroll: true }); } catch (e) { /* focus optional */ }
