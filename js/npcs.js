@@ -35,7 +35,9 @@ const Npcs = {
     const spine = typeof MillSpine !== "undefined" ? MillSpine.stage() : "none";
     const visits = (st.talks = (st.talks | 0) + 1);
     let line;
-    if ((n.id === "bramble" || n.id === "lark") && spine !== "none" && !(typeof MillSpine !== "undefined" && MillSpine.atLeast("done")) && visits % 2 === 1) {
+    if (typeof MillSpine !== "undefined" && MillSpine.stage() === "turning" && n.turningLine && visits % 2 === 1) {
+      line = n.turningLine;
+    } else if ((n.id === "bramble" || n.id === "lark") && spine !== "none" && !(typeof MillSpine !== "undefined" && MillSpine.atLeast("done")) && visits % 2 === 1) {
       line = "The east mill’s gone quiet.";
     } else if (st.lastCatchRemembered && visits % 3 === 0) {
       line = `That ${st.lastCatchRemembered} still sits with me.`;

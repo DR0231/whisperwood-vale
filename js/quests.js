@@ -289,8 +289,9 @@ const MillEnd = {
     const rares = (DESIGN.millEndRares || []).map((id) => {
       const f = FISH.find((x) => x.id === id);
       const e = Journal.ensure(id);
-      const day = (e.firstDay | 0) > 0 ? (e.firstDay | 0) : 0;
-      return `<li class="stamp-open"><span class="stamp-seal is-ink" aria-hidden="true"></span><span class="stamp-title">${f ? f.name : id}</span><span class="stamp-day">Day ${day}</span></li>`;
+      const day = e.firstDay | 0;
+      const daySpan = day > 0 ? `<span class="stamp-day">Day ${day}</span>` : "";
+      return `<li class="stamp-open"><span class="stamp-seal is-ink" aria-hidden="true"></span><span class="stamp-title">${f ? f.name : id}</span>${daySpan}</li>`;
     }).join("");
     let landedSum = 0;
     let bestName = "";
@@ -310,7 +311,7 @@ const MillEnd = {
       }
     }
     const stats = [
-      `Day ${Save.data.flags.millEndDay | 0}`,
+      C.finished.replace("{N}", Save.data.flags.millEndDay | 0),
       `${Journal.count()} / ${FISH.length} species in the book`,
       `${landedSum} fish landed`,
       `Biggest: ${bestName}, ${best}"`,
@@ -323,12 +324,31 @@ const MillEnd = {
     if (!canvas) return;
     const c = canvas.getContext("2d");
     if (!c) return;
+    const time = t || 0;
+    const frame = Math.floor(time / (DESIGN.millWheelStep || 0.35)) % 4;
     c.imageSmoothingEnabled = false;
-    c.fillStyle = "#d8c0a0";
-    c.fillRect(0, 0, 96, 36);
-    c.fillStyle = "#3a5a48";
-    c.fillRect(0, 36, 96, 12);
-    Sprites.mill(c, 56, 44, t);
+    Sprites.fill(c, 0, 0, 96, 48, "#d8c0a0");
+    Sprites.fill(c, 0, 31, 96, 5, "#6a7a50");
+    Sprites.fill(c, 0, 31, 96, 1, "#8a9a68");
+    Sprites.fill(c, 0, 6, 34, 32, PALETTE.wood);
+    Sprites.fill(c, 0, 6, 34, 3, PALETTE.woodHi);
+    for (let y = 13; y <= 37; y += 6) Sprites.fill(c, 0, y, 34, 1, PALETTE.woodLo);
+    for (let row = 0; row <= 7; row++) {
+      Sprites.fill(c, 0, row, Math.min(40, 36 + row) + 1, 1, "#6a3030");
+    }
+    Sprites.fill(c, 10, 16, 7, 7, "#2a1c12");
+    Sprites.fill(c, 11, 17, 5, 5, "#c8e0f0");
+    Sprites.fill(c, 13, 17, 1, 5, "#2a1c12");
+    Sprites.fill(c, 34, 25, 24, 2, PALETTE.woodLo);
+    Sprites.millWheel(c, 60, 26, 15, time);
+    Sprites.fill(c, 0, 38, 96, 10, "#3a5a48");
+    Sprites.fill(c, 0, 38, 96, 1, "#5a7a68");
+    for (let i = 0; i < 5; i++) {
+      Sprites.fill(c, 48 + ((i * 5 + frame) % 22), 39 + ((i + frame) % 2), 2, 1, "#c8e0f0");
+    }
+    const fall = Math.floor((time * 10) % 7);
+    Sprites.fill(c, 75, 39 + fall, 1, 2, "#9fc6e0");
+    Sprites.fill(c, 77, 39 + ((fall + 3) % 7), 1, 2, "#9fc6e0");
   },
 };
 

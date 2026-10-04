@@ -88,6 +88,7 @@ const UI = {
     if (btn) btn.textContent = returning ? "Return to the Vale" : "Enter the Vale";
     const blurb = document.getElementById("start-blurb");
     if (blurb && returning) blurb.textContent = "The vale kept your place. Walk out when you’re ready.";
+    if (blurb && typeof MillSpine !== "undefined" && MillSpine.stage() === "turning") blurb.textContent = MILL_END_COPY.startLine;
   },
 
   buildJournal() {

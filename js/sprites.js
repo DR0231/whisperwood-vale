@@ -1015,6 +1015,29 @@ const Sprites = {
     this.fill(ctx, x + 22, Math.round(y - 1 + ((t || 0) * 10) % 6), 1, 2, "#9fc6e0");
   },
 
+  millWheel(ctx, cx, cy, r, t) {
+    const frame = Math.floor((t || 0) / (DESIGN.millWheelStep || 0.35)) % 4;
+    const a0 = frame * Math.PI / 16;
+    for (let i = 0; i < 360; i++) {
+      const a = i * Math.PI / 180;
+      const co = Math.cos(a);
+      const sn = Math.sin(a);
+      this.fill(ctx, Math.round(cx + co * r), Math.round(cy + sn * r), 1, 1, PALETTE.woodLo);
+      this.fill(ctx, Math.round(cx + co * (r - 1)), Math.round(cy + sn * (r - 1)), 1, 1, PALETTE.woodLo);
+    }
+    for (let k = 0; k < 8; k++) {
+      const a = a0 + k * Math.PI / 4;
+      const co = Math.cos(a);
+      const sn = Math.sin(a);
+      for (let rad = 3; rad <= r - 2; rad++) {
+        this.fill(ctx, Math.round(cx + co * rad), Math.round(cy + sn * rad), 1, 1, PALETTE.wood);
+      }
+      this.fill(ctx, Math.round(cx + co * (r + 1)) - 1, Math.round(cy + sn * (r + 1)) - 1, 3, 3, PALETTE.woodHi);
+    }
+    this.fill(ctx, Math.round(cx) - 2, Math.round(cy) - 2, 4, 4, PALETTE.woodLo);
+    this.fill(ctx, Math.round(cx) - 1, Math.round(cy) - 1, 2, 2, PALETTE.woodHi);
+  },
+
   shelf(ctx, x, y, facing, opt) {
     opt = opt || {};
     const three = facing === 1 || facing === 2;

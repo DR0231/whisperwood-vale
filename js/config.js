@@ -489,6 +489,7 @@ const NPC_DATA = [
     fav: "stonetrout", favBait: ["crickets", 2],
     giftFav: "{A}, still cold from the north river. You remembered.",
     giftOther: "{A}. Kind of you. A Stone Trout would’ve had me grinning.",
+    turningLine: "The kettle’s on and the mill’s turning. Not a bad year.",
     greet: "Need bait? The board by my stall has today’s ask.",
     hearts: [
       "Bring me something river-bright and I’ll remember you.",
@@ -503,6 +504,7 @@ const NPC_DATA = [
     fav: "sunperch",   favBait: ["worms", 3],
     giftFav: "{A}! The pan’s already warm. You remembered.",
     giftOther: "{A}. Kind of you. I’d still trade it for a Sunperch.",
+    turningLine: "Hear that wheel? Pond’s still kind, if you’re staying.",
     greet: "Pond’s kind if you wait. I like a patient neighbor.",
     hearts: [
       "A sunperch for the pan wouldn’t go amiss.",
@@ -517,6 +519,7 @@ const NPC_DATA = [
     fav: "mistbass",   favBait: ["glow", 1],
     giftFav: "{A}, fog still on it. You remembered.",
     giftOther: "{A}. I’ll write it down. A Mist Bass is what I keep hoping for.",
+    turningLine: "Used to hear the wheel from the lake path. Now I do again.",
     greet: "I collect almosts. The ones that got away still count.",
     hearts: [
       "Tell me if the lake coughs up a rumor.",
@@ -545,14 +548,16 @@ const MILL_SPINE_MAIL = {
   opened: "Bramble: “East boat’s free. Mill’s still silent, though. Take berries if you go.”",
   visited: "The mill wheel doesn’t turn. Reeds keep the rest of the story.",
   done: "Still quiet at the mill — but you were there. Someone’s untied the island boat. — Wren",
-  turning: "Lark: “Heard the wheel from the lake path this morning. I’d nearly forgotten the sound.”",
+  turning: "Lark: “Heard the wheel from the lake path today. I’d nearly forgotten the sound.”",
 };
 
 const MILL_END_COPY = {
   kicker: "You’ve finished Whisperwood Vale",
   title: "The wheel turns",
-  body: "Five rare fish, all landed. In the night the east mill woke, and you can hear its wheel from the lake path.",
+  body: "Five rare fish, all landed. While you slept the east mill woke, and you can hear its wheel from the lake path.",
   button: "Keep fishing",
+  finished: "Finished on day {N}",
+  startLine: "The mill wheel turns. You can hear it from the lake path.",
   sign: "The wheel turns. The reeds lean with it.",
   journal: "Five rares to turn the wheel",
   journalDone: "The mill wheel turns again",
