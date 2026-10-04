@@ -1,0 +1,29 @@
+{
+  "name": "whisperwood-vale",
+  "productName": "Whisperwood Vale",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "copy-game": "node copy-game.js",
+    "start": "npm run copy-game && electron .",
+    "dev": "npm run copy-game && electron . --vale-dev",
+    "dist": "npm run copy-game && electron-builder --win dir"
+  },
+  "build": {
+    "appId": "com.nightbite.whisperwoodvale",
+    "asar": false,
+    "files": [
+      "main.js",
+      "preload.js",
+      "game/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "devDependencies": {
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3"
+  }
+}

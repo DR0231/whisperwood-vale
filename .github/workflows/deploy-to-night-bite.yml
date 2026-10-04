@@ -35,7 +35,7 @@ jobs:
         run: |
           rsync -a --delete \
             --exclude '.git' --exclude '.github' --exclude '.cursorrules' \
-            --exclude '.images' --exclude '*.zip' \
+            --exclude '.images' --exclude '*.zip' --exclude 'desktop' \
             game/ site/whisperwood/
           cd site && python3 scripts/whisperwood-links.py
 
