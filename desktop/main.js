@@ -1,4 +1,5 @@
 const { app, BrowserWindow, protocol, ipcMain, Menu, net, session, screen } = require("electron");
+const fs = require("fs");
 const path = require("path");
 const { pathToFileURL } = require("url");
 
@@ -8,6 +9,8 @@ else {
 
   let win = null;
   let saved = false;
+  let saving = false;
+  const waiters = [];
 
   app.on("second-instance", () => {
     if (win && !win.isDestroyed()) {
@@ -26,21 +29,26 @@ else {
 
   function requestSave(done) {
     if (saved) { done(); return; }
-    saved = true;
+    waiters.push(done);
+    if (saving) return;
+    saving = true;
     const flush = () => {
       try { session.defaultSession.flushStorageData(); } catch (e) { /* storage optional */ }
     };
-    if (!win || win.isDestroyed() || !win.webContents || win.webContents.isDestroyed()) {
+    const settle = () => {
       flush();
-      done();
+      saved = true;
+      waiters.splice(0).forEach((fn) => fn());
+    };
+    if (!win || win.isDestroyed() || !win.webContents || win.webContents.isDestroyed()) {
+      settle();
       return;
     }
     let finished = false;
     const finish = () => {
       if (finished) return;
       finished = true;
-      flush();
-      done();
+      settle();
     };
     const timer = setTimeout(finish, 1500);
     ipcMain.once("vale:save-done", () => {
@@ -74,6 +82,7 @@ else {
       const f11 = input.key === "F11" || input.code === "F11";
       if (!f11) return;
       if (input.type === "keyDown") {
+        if (input.isAutoRepeat) { event.preventDefault(); return; }
         f11Down = true;
         if (win && !win.isDestroyed()) win.setFullScreen(!win.isFullScreen());
         event.preventDefault();
@@ -118,6 +127,12 @@ else {
   app.on("window-all-closed", () => { app.quit(); });
 
   app.whenReady().then(() => {
+    session.defaultSession.on("will-download", (e, item) => {
+      item.setSaveDialogOptions({
+        title: "Download save",
+        defaultPath: path.join(app.getPath("downloads"), item.getFilename()),
+      });
+    });
     const root = path.join(__dirname, "game");
     protocol.handle("app", (request) => {
       let url;
@@ -132,6 +147,10 @@ else {
       const outside = path.relative(root, file);
       if (outside.startsWith("..") || path.isAbsolute(outside)) {
         return new Response("forbidden", { status: 403 });
+      }
+      if (!fs.existsSync(file)) {
+        console.warn("missing", rel);
+        return new Response("not found", { status: 404 });
       }
       return net.fetch(pathToFileURL(file).href);
     });
