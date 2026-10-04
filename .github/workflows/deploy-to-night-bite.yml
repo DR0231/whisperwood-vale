@@ -1,0 +1,52 @@
+# Copies the game into nightbiteoh.com/whisperwood/ on every push to main.
+name: Deploy to The Night Bite
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: night-bite-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out game
+        uses: actions/checkout@v4
+        with:
+          path: game
+
+      - name: Check out site
+        uses: actions/checkout@v4
+        with:
+          repository: DR0231/the-night-bite
+          ssh-key: ${{ secrets.NIGHTBITE_DEPLOY_KEY }}
+          path: site
+
+      - name: Check game scripts
+        run: |
+          test -f game/play.html
+          for f in game/js/*.js; do node --check "$f"; done
+
+      - name: Sync game into site
+        run: |
+          rsync -a --delete \
+            --exclude '.git' --exclude '.github' --exclude '.cursorrules' \
+            --exclude '.images' --exclude '*.zip' \
+            game/ site/whisperwood/
+          cd site && python3 scripts/whisperwood-links.py
+
+      - name: Commit and push
+        working-directory: site
+        run: |
+          git add -A whisperwood
+          if git diff --cached --quiet; then
+            echo "Site already up to date."
+            exit 0
+          fi
+          git -c user.email="nightbite@local" -c user.name="The Night Bite" \
+            commit -m "Whisperwood: deploy ${GITHUB_SHA::7} from whisperwood-vale"
+          git push origin HEAD:main
