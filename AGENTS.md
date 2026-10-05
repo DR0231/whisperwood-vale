@@ -14,3 +14,10 @@ When you change mechanics:
 After a Cursor prompt, hard-refresh `play.html` and open F8 → Live check.
 
 Do not add missing `img/*.png` paths. Do not rewrite `sprites.js` player. Vanilla HTML/JS only.
+
+## Cursor Cloud specific instructions
+
+Vanilla HTML/JS. Node is already on the image; there is no package install.
+
+- Dev server: `node serve.js` from the repo root. It listens on `0.0.0.0:8765` (`PORT` overrides the port). `/` serves `play.html`.
+- Script check used by the deploy workflow: `for f in js/*.js serve.js; do node --check "$f"; done`
