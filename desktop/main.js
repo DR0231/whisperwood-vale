@@ -26,6 +26,9 @@ else {
 
   const devMode = process.argv.includes("--vale-dev");
   ipcMain.on("vale:dev", (e) => { e.returnValue = devMode; });
+  ipcMain.on("vale:fullscreen", () => {
+    if (win && !win.isDestroyed()) win.setFullScreen(!win.isFullScreen());
+  });
 
   function requestSave(done) {
     if (saved) { done(); return; }
